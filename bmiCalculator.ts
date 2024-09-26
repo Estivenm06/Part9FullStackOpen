@@ -6,7 +6,7 @@ interface Measures {
 const parseArguments = (args: string[]): Measures => {
   if (args.length <= 2) throw new Error("Measures were not inserted!");
   if (args.length === 3) throw new Error("Only height was inserted!");
-  if (args.length > 4) throw new Error("Too many arguments!");  
+  if (args.length > 4) throw new Error("Too many arguments!");
 
   if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
     if (!(Number(args[2]) > 2) && !(Number(args[2]) < 0)) {
@@ -22,7 +22,7 @@ const parseArguments = (args: string[]): Measures => {
   }
 };
 
-const calculateBmi = (height: number, weight: number) => {
+export const calculateBmi = (height: number, weight: number) => {
   const bmi = weight / (height / 100) ** 2;
   if (bmi < 18.5) {
     return "Underweight";
@@ -33,7 +33,9 @@ const calculateBmi = (height: number, weight: number) => {
   } else if (bmi >= 30) {
     return "Obesity";
   }
+  return bmi;
 };
+
 try {
   const { height, weight } = parseArguments(process.argv);
   console.log(calculateBmi(height, weight));
