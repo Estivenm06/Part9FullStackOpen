@@ -10,7 +10,7 @@ interface Result {
   average: number;
 }
 
-interface Numbers {
+export interface Numbers {
   value1: number;
   value2: number;
   value3: number;
@@ -20,7 +20,6 @@ interface Numbers {
   value7: number;
   value8: number;
   value9: number;
-  value10: number;
 }
 
 const args = (args: string[]): Numbers => {
@@ -28,8 +27,8 @@ const args = (args: string[]): Numbers => {
   if (args.length > 12) throw new Error("Too many arguments!");
 
   if (
-    isNotNumber(args[2]) &&
     isNotNumber(args[3]) &&
+    isNotNumber(args[4]) &&
     isNotNumber(args[5]) &&
     isNotNumber(args[6]) &&
     isNotNumber(args[7]) &&
@@ -39,44 +38,44 @@ const args = (args: string[]): Numbers => {
     isNotNumber(args[11])
   ) {
     return {
-      value1: Number(args[2]),
-      value2: Number(args[3]),
-      value3: Number(args[4]),
-      value4: Number(args[5]),
-      value5: Number(args[6]),
-      value6: Number(args[7]),
-      value7: Number(args[8]),
-      value8: Number(args[9]),
-      value9: Number(args[10]),
-      value10: Number(args[11]),
+      value1: Number(args[3]),
+      value2: Number(args[4]),
+      value3: Number(args[5]),
+      value4: Number(args[6]),
+      value5: Number(args[7]),
+      value6: Number(args[8]),
+      value7: Number(args[9]),
+      value8: Number(args[10]),
+      value9: Number(args[11]),
     };
   } else {
     throw new Error("Provided were not numbers!");
   }
 };
 
-const calculateExercises = (
+export const calculateExercises = (
   dailyExercise: number[],
+  target: number
 ): Result => {
   const days = new Map<string, number>();
-  const target = dailyExercise[0]
-  for(let i: number = 1; i <= dailyExercise.length - 1; i++){
-    days.set(`${i}`, dailyExercise[i])
+  for (let i: number = 0; i <= dailyExercise.length - 1; i++) {
+    days.set(`${i}`, dailyExercise[i]);
   }
   //console.log(days);
-  let daysTrained: number = 0;
+  let trainingDays: number = 0;
   let average: number = 0;
   let rating: number;
   let ratingDescripton: string;
-  
-  for (let value of days.values()) {
+  let periodLength = days.size
+
+  for (const value of days.values()) {
     average += value;
     if (value > 0) {
-      daysTrained += 1;
+      trainingDays += 1;
     }
   }
   average = average / days.size;
-  let success: boolean = average >= target ? true : false;
+  const success: boolean = average >= target ? true : false;
 
   if (average < target) {
     rating = 1;
@@ -89,17 +88,19 @@ const calculateExercises = (
     ratingDescripton = "Excellent Work, You are the best!";
   }
   return {
-    periodLength: days.size,
-    trainingDays: daysTrained,
-    success: success,
-    rating: rating,
-    ratingDescripton: ratingDescripton,
-    target: target,
-    average: average,
+    periodLength,
+    trainingDays,
+    success,
+    rating,
+    ratingDescripton,
+    target,
+    average,
   };
 };
 
 try {
+  //console.log(process.argv);
+  const target: number = Number(process.argv[2]);
   const {
     value1,
     value2,
@@ -110,29 +111,17 @@ try {
     value7,
     value8,
     value9,
-    value10,
   } = args(process.argv);
   console.log(
     calculateExercises(
-      [
-        value1,
-        value2,
-        value3,
-        value4,
-        value5,
-        value6,
-        value7,
-        value8,
-        value9,
-        value10,
-      ]
+      [value1, value2, value3, value4, value5, value6, value7, value8, value9],
+      target
     )
   );
 } catch (error) {
-  let errorMessage = 'Something bad happen: '
-  if(error instanceof Error){
-    errorMessage += error.message
+  let errorMessage = "Something bad happen: ";
+  if (error instanceof Error) {
+    errorMessage += error.message;
   }
   console.log(errorMessage);
-  
 }
