@@ -9,6 +9,7 @@ const getAll = async () => {
   );
 
   return data;
+  
 };
 
 const create = async (object: PatientFormValues) => {
