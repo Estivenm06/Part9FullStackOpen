@@ -1,5 +1,5 @@
-import { Patient } from "../types";
-import { patientObject } from "../utils";
+import { patient } from "../types";
+import { toNewPatient } from "../utils";
 const dataBase = [
     {
         "id": "d2773336-f723-11e9-8f0b-362b9e155667",
@@ -43,8 +43,8 @@ const dataBase = [
     }
 ];
 
-const data: Patient[] = dataBase.map(obj => {
-    const object = patientObject(obj) as Patient
+const data: patient[] = dataBase.map(obj => {
+    const object = toNewPatient(obj) as patient
     object.id = obj.id
     return object
 })
