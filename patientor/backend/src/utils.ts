@@ -6,7 +6,7 @@ export const patientObject = z.object({
   dateOfBirth: z.string().date(),
   ssn: z.string(),
   gender: z.nativeEnum(Gender),
-  occupation: z.string()
+  occupation: z.string(),
 })
 
 export const toNewPatient = (object: unknown): NewPatient => {

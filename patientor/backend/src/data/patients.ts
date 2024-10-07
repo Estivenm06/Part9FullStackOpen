@@ -46,6 +46,7 @@ const dataBase = [
 const data: patient[] = dataBase.map(obj => {
     const object = toNewPatient(obj) as patient
     object.id = obj.id
+    object.entries = []
     return object
 })
 
