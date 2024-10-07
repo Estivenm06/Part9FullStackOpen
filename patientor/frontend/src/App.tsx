@@ -8,6 +8,7 @@ import { Patient } from "./types";
 
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
+import { PatientSinglePage } from "./components/PatientSinglePage";
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -22,6 +23,7 @@ const App = () => {
     void fetchPatientList();
   }, []);
   
+  
   return (
     <div className="App">
       <Router>
@@ -35,11 +37,12 @@ const App = () => {
           <Divider hidden />
           <Routes>
             <Route path="/" element={<PatientListPage patients={patients} setPatients={setPatients} />} />
+            <Route path="/patients/:id" element={<PatientSinglePage/>} />
           </Routes>
-        </Container>
-      </Router>
-    </div>
-  );
+          </Container>
+          </Router>
+          </div>
+        );
 };
 
 export default App;
