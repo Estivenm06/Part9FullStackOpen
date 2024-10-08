@@ -1,4 +1,5 @@
 export interface Diagnosis {
+  map(arg0: (d: any) => any): any;
   code: string;
   name: string;
   latin?: string;

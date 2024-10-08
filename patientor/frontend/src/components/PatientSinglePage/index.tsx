@@ -1,6 +1,7 @@
 import patientService from "../../services/patients.ts";
+import diagnosisService from "../../services/diagnosis.ts";
 import { useParams } from "react-router-dom";
-import { Patient } from "../../types.ts";
+import { Diagnosis, Patient } from "../../types.ts";
 import { useEffect, useState } from "react";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
@@ -8,6 +9,7 @@ import TransgenderIcon from "@mui/icons-material/Transgender";
 
 export const PatientSinglePage = () => {
   const [patient, setPatient] = useState<Patient[]>([]);
+  const [diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
   const [Isloading, setIsloading] = useState<boolean>(false);
   const { id } = useParams();
 
@@ -17,6 +19,11 @@ export const PatientSinglePage = () => {
       setPatient(patient);
       setIsloading(true);
     };
+    const diagnosis = async () => {
+      const diagnosis = await diagnosisService.getAll();
+      setDiagnosis(diagnosis);
+    };
+    void diagnosis();
     void patientFilter();
   }, [id]);
 
@@ -61,12 +68,13 @@ export const PatientSinglePage = () => {
                   {e.date} {e.description}
                   <ul>
                     {e.diagnosisCodes?.map((e, id) => {
-                      return (
-                        <div key={id}>
-                          <li>{e}</li>
-                        </div>
-                      );
-                    })}
+                      const diagnoses = diagnosis.find(d => d.code === e ? d : false)
+                      if(!diagnoses){
+                        return null
+                      }
+                      return (<div key={id}><li>{diagnoses.code} {diagnoses.name}</li></div>)
+                    })
+                    }
                   </ul>
                 </div>
               );
