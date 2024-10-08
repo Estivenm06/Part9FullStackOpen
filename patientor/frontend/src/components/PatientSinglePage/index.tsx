@@ -18,7 +18,7 @@ export const PatientSinglePage = () => {
       setIsloading(true);
     };
     void patientFilter();
-  }, [patient]);
+  }, [id]);
 
   const Gender = ({ gender }: { gender: string }) => {
     if (gender === "female") {
@@ -53,6 +53,25 @@ export const PatientSinglePage = () => {
           </h2>
           <p>{patient[0].ssn}</p>
           <p>occupation: {patient[0].occupation}</p>
+          <div>
+            <h3>entries</h3>
+            {patient[0].entries?.map((e, id) => {
+              return (
+                <div key={id}>
+                  {e.date} {e.description}
+                  <ul>
+                    {e.diagnosisCodes?.map((e, id) => {
+                      return (
+                        <div key={id}>
+                          <li>{e}</li>
+                        </div>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
         </>
       ) : (
         <></>

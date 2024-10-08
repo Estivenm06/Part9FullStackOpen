@@ -12,7 +12,7 @@ export enum HealthCheckRating {
   'HighRisk' = 2,
   'CriticalRisk' = 3,
 }
-export type Diagnoses = {
+export type Diagnosis = {
   code: string;
   name: string;
   latin?: string;
@@ -34,7 +34,7 @@ export type BaseEntry = {
   date: string
   specialist: string
   description: string
-  diagnosisCodes?: Array<Diagnoses['code']>
+  diagnosisCodes?: Array<Diagnosis['code']>
 };
 
 interface HealthCheckEntry extends BaseEntry {
