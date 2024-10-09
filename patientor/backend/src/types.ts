@@ -28,7 +28,6 @@ type SickLeave = {
   endDate: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type BaseEntry = {
   id: string
   date: string
@@ -66,6 +65,8 @@ export type patient = {
 };
 
 export type NonSensitivePatient = Omit<Patient, "ssn" | 'entries'>;
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never
+export type newEntry = UnionOmit<Entry, 'id'>
 export type NewPatient = z.infer<typeof patientObject>;
 export interface Patient extends NewPatient {
   id: string;

@@ -3,6 +3,7 @@ import {
   nonSensitivePatient,
   addPatient,
   getPatient,
+  createEntry,
 } from "../services/patientsService";
 import { NonSensitivePatient, Patient } from "../types";
 import { toNewPatient } from "../utils";
@@ -23,8 +24,6 @@ router.post("/", (req, res) => {
   try {
     const newPatient = toNewPatient(body);
     const addedPatient = addPatient(newPatient);
-    console.log(addedPatient);
-
     res.json(addedPatient);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -32,6 +31,17 @@ router.post("/", (req, res) => {
     } else {
       res.status(400).send({ error: "unknown error" });
     }
+  }
+});
+
+router.post("/:id/entries", (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+  if (!body.date || !body.description || !body.specialist || !body.type ) {
+    res.status(400).send({ error: "Body empty or some values are missing!" });
+  } else {
+    const newEntry = createEntry(body, id);
+    res.json(newEntry);
   }
 });
 

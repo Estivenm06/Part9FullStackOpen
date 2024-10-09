@@ -9,6 +9,7 @@ import TransgenderIcon from "@mui/icons-material/Transgender";
 import { Hospital } from "./Hospital.tsx";
 import { HealthCheck } from "./HealthCheck.tsx";
 import { OccupationalHealthcare } from "./OccupationalHealthcare.tsx";
+import { AddNewEntry } from "./FormEntry/index.tsx";
 
 const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
   const assertNever = (value: never): never => {
@@ -30,14 +31,24 @@ const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
 
 export const PatientSinglePage = () => {
   const [patient, setPatient] = useState<Patient[]>([]);
+  const [entries, setEntries] = useState<Entry[]>([]);
   const [diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
   const [Isloading, setIsloading] = useState<boolean>(false);
+  const [description, setDescription] = useState<string>("");
+  const [date, setDate] = useState<string>("");
+  const [specialist, setSpecialist] = useState<string>("");
+  const [healthRating, setHealthRating] = useState<string>("");
+  const [diagnosisCodes, setdiagnosisCodes] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
   const { id } = useParams();
 
   useEffect(() => {
     const patientFilter = async () => {
       const patient = await patientService.getOne(id);
       setPatient(patient);
+      if (patient[0].entries) {
+        setEntries(patient[0].entries);
+      }
       setIsloading(true);
     };
     const diagnosis = async () => {
@@ -50,26 +61,68 @@ export const PatientSinglePage = () => {
 
   const Gender = ({ gender }: { gender: string }) => {
     if (gender === "female") {
-      return (
-        <>
-          <FemaleIcon />
-        </>
-      );
+      return <FemaleIcon />;
     } else if (gender === "male") {
-      return (
-        <>
-          <MaleIcon />
-        </>
-      );
+      return <MaleIcon />;
     } else if (gender === "other") {
-      return (
-        <>
-          <TransgenderIcon />
-        </>
-      );
+      return <TransgenderIcon />;
     } else {
       return <></>;
     }
+  };
+
+  const submit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    try {
+      const dCodes: Array<Diagnosis["code"]> = [];
+      const codesInserted = diagnosisCodes.split(",");
+      codesInserted.map((c) => dCodes.push(c));
+      let healthR;
+      if(Number(healthRating) >= 4){
+        setError(`Value of HealthCheckRating incorrect: ${Number(healthRating)}`)
+        return null
+      }else{
+        healthR = Number(healthRating)
+      }
+      if (!id) {
+        return null;
+      }
+      const entry = await patientService.createEntry(
+        {
+          date,
+          description,
+          specialist,
+          healthCheckRating: healthR,
+          diagnosisCodes: dCodes,
+          type: "HealthCheck",
+        },
+        id
+      );
+      setEntries(entries.concat(entry));
+      setDate("");
+      setDescription("");
+      setSpecialist("");
+      setHealthRating("");
+      setdiagnosisCodes("");
+    } catch (error) {
+      let errorMessage: string;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        setError(errorMessage);
+        setTimeout(() => {
+          setError(null);
+        }, 2500);
+      }
+    }
+  };
+
+  const cancel = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setDate("");
+    setDescription("");
+    setSpecialist("");
+    setHealthRating("");
+    setdiagnosisCodes("");
   };
 
   return (
@@ -81,9 +134,24 @@ export const PatientSinglePage = () => {
           </h2>
           <p>{patient[0].ssn}</p>
           <p>occupation: {patient[0].occupation}</p>
+          <AddNewEntry
+            description={description}
+            setDescription={setDescription}
+            date={date}
+            setDate={setDate}
+            specialist={specialist}
+            setSpecialist={setSpecialist}
+            healthRating={healthRating}
+            setHealthRating={setHealthRating}
+            diagnosisCodes={diagnosisCodes}
+            setdiagnosisCodes={setdiagnosisCodes}
+            submit={submit}
+            cancel={cancel}
+            error={error}
+          />
           <div>
             <h3>entries</h3>
-            {patient[0].entries?.map((e, id) => {
+            {entries?.map((e, id) => {
               return (
                 <div key={id}>
                   <EntryDetails entry={e} />
