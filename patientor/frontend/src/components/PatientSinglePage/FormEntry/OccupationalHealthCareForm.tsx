@@ -38,8 +38,8 @@ export const OccupationalFrom = ({
     setDate(null);
     setDescription("");
     setSpecialist("");
-    setSickEnd("");
-    setSickStart("");
+    setSickEnd(null);
+    setSickStart(null);
     setdiagnosisCodes([]);
   };
   const ITEM_HEIGHT = 48;
@@ -88,22 +88,34 @@ export const OccupationalFrom = ({
               value={specialist}
               onChange={({ target }) => setSpecialist(target.value)}
             />
-            <TextField
-              id="standard-basic"
-              label="Sick Date Start"
-              variant="standard"
-              value={sickStart}
-              onChange={({ target }) => setSickStart(target.value)}
-              fullWidth
-            />
-            <TextField
-              id="standard-basic"
-              label="Sick Date End"
-              variant="standard"
-              value={sickEnd}
-              onChange={({ target }) => setSickEnd(target.value)}
-              fullWidth
-            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DateField"]}>
+                <DateField
+                  label="Sick Date Start"
+                  value={sickStart}
+                  onChange={(target) => {
+                    if (!target) {
+                      return null;
+                    }
+                    setSickStart(target);
+                  }}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DateField"]}>
+                <DateField
+                  label="Sick Date End"
+                  value={sickEnd}
+                  onChange={(target) => {
+                    if (!target) {
+                      return null;
+                    }
+                    setSickEnd(target);
+                  }}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
             <TextField
               id="standard-basic"
               label="Employer Name"

@@ -6,7 +6,6 @@ import {
   Discharge,
   Entry,
   Patient,
-  SickLeave,
 } from "../../types.ts";
 import { useEffect, useState } from "react";
 import FemaleIcon from "@mui/icons-material/Female";
@@ -53,8 +52,8 @@ export const PatientSinglePage = () => {
   const [dischargeCriteria, setDischargeCriteria] =
     useState<Discharge["criteria"]>("");
   const [employerName, setEmployerName] = useState<string>("");
-  const [sickStart, setSickStart] = useState<SickLeave["startDate"]>("");
-  const [sickEnd, setSickEnd] = useState<SickLeave["endDate"]>("");
+  const [sickStart, setSickStart] = useState<Dayjs | null>(null);
+  const [sickEnd, setSickEnd] = useState<Dayjs | null>(null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -145,8 +144,8 @@ export const PatientSinglePage = () => {
         setdiagnosisCodes([]);
       } else if (entryType === "OccupationalHealthCare") {
         const sickLeave = {
-          startDate: sickStart,
-          endDate: sickEnd,
+          startDate: String(sickStart),
+          endDate: String(sickEnd),
         };
         const entry = await patientService.createEntry(
           {
@@ -165,8 +164,8 @@ export const PatientSinglePage = () => {
         setDescription("");
         setSpecialist("");
         setEmployerName("");
-        setSickStart("");
-        setSickEnd("");
+        setSickStart(null);
+        setSickEnd(null);
         setdiagnosisCodes([]);
       }
     } catch (error) {
@@ -185,12 +184,10 @@ export const PatientSinglePage = () => {
     const {
       target: { value },
     } = event;
-    setdiagnosisCodes(
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    setdiagnosisCodes(typeof value === "string" ? value.split(",") : value);
   };
 
-  const diagnosesCode: Array<Diagnosis['code']> = [
+  const diagnosesCode: Array<Diagnosis["code"]> = [
     "M24.2",
     "M51.2",
     "S03.5",

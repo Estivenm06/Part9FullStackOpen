@@ -15,18 +15,17 @@ enum HealhCheckRating {
 }
 
 interface BaseProps {
-  date: Dayjs | null ;
+  date: Dayjs | null;
   description: string;
   specialist: string;
   diagnosisCodes: string[];
-  setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>
+  setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
   setSpecialist: React.Dispatch<React.SetStateAction<string>>;
-  setdiagnosisCodes: React.Dispatch<React.SetStateAction<string[]>>
+  setdiagnosisCodes: React.Dispatch<React.SetStateAction<string[]>>;
   submit: (event: React.SyntheticEvent) => void;
-  diagnosesCode: Array<Diagnosis['code']>
-  handleChange: (event: SelectChangeEvent<string[]>) => void
-
+  diagnosesCode: Array<Diagnosis["code"]>;
+  handleChange: (event: SelectChangeEvent<string[]>) => void;
 }
 
 export interface NewEntryProp extends BaseProps {
@@ -41,10 +40,10 @@ export interface NewEntryProp extends BaseProps {
   setDischargeCriteria: React.Dispatch<React.SetStateAction<string>>;
   employerName: string;
   setEmployerName: React.Dispatch<React.SetStateAction<string>>;
-  sickStart: string;
-  setSickStart: React.Dispatch<React.SetStateAction<string>>;
-  sickEnd: string;
-  setSickEnd: React.Dispatch<React.SetStateAction<string>>;
+  sickStart: Dayjs | null;
+  setSickStart: React.Dispatch<React.SetStateAction<Dayjs | null>>;
+  sickEnd: Dayjs | null;
+  setSickEnd: React.Dispatch<React.SetStateAction<Dayjs | null>>;
 }
 
 export interface HealthProp extends BaseProps {
@@ -62,10 +61,10 @@ export interface HospitalProps extends BaseProps {
 export interface OccupationalForm extends BaseProps {
   employerName: string;
   setEmployerName: React.Dispatch<React.SetStateAction<string>>;
-  sickStart: string;
-  setSickStart: React.Dispatch<React.SetStateAction<string>>;
-  sickEnd: string;
-  setSickEnd: React.Dispatch<React.SetStateAction<string>>;
+  sickStart: Dayjs | null;
+  setSickStart: React.Dispatch<React.SetStateAction<Dayjs | null>>;
+  sickEnd: Dayjs | null;
+  setSickEnd: React.Dispatch<React.SetStateAction<Dayjs | null>>;
 }
 
 export type Discharge = {
