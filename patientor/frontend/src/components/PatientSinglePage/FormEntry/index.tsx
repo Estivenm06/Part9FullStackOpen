@@ -1,28 +1,14 @@
 import {
   FormControl,
-  Button,
-  TextField,
-  Box,
-  Grid,
   Alert,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import React from "react";
-
-interface NewEntryProp {
-  date: string;
-  description: string;
-  specialist: string;
-  healthRating: string;
-  diagnosisCodes: string;
-  setDate: React.Dispatch<React.SetStateAction<string>>;
-  setDescription: React.Dispatch<React.SetStateAction<string>>;
-  setSpecialist: React.Dispatch<React.SetStateAction<string>>;
-  setHealthRating: React.Dispatch<React.SetStateAction<string>>;
-  setdiagnosisCodes: React.Dispatch<React.SetStateAction<string>>;
-  submit: (event: React.SyntheticEvent) => void;
-  cancel: (event: React.SyntheticEvent) => void;
-  error: string | null;
-}
+import { HealthForm } from "./HealthCheckForm";
+import { NewEntryProp } from "../../../types";
+import { Hospital } from "./HospitalForm";
+import { OccupationalFrom } from "./OccupationalHealthCareForm";
 
 export const AddNewEntry = ({
   date,
@@ -36,71 +22,108 @@ export const AddNewEntry = ({
   diagnosisCodes,
   setdiagnosisCodes,
   submit,
-  cancel,
   error,
+  entryType,
+  setEntryType,
+  dischargeDate,
+  setDischargeDate,
+  dischargeCriteria,
+  setDischargeCriteria,
+  sickStart,
+  sickEnd,
+  setSickStart,
+  setSickEnd,
+  employerName,
+  setEmployerName,
+  diagnosesCode,
+  handleChange
 }: NewEntryProp) => {
   return (
     <>
       {error ? <Alert severity="error">{error}</Alert> : null}
-      <Box component="section" sx={{ p: 2, border: "1px dashed grey" }}>
-        <form onSubmit={submit}>
-          <FormControl fullWidth>
-            <h2>New HealthCheck entry</h2>
-            <TextField
-              id="standard-basic"
-              label="Description"
-              variant="standard"
-              value={description}
-              onChange={({ target }) => setDescription(target.value)}
-              fullWidth
-            />
-            <TextField
-              id="standard-basic"
-              label="Date"
-              variant="standard"
-              fullWidth
-              value={date}
-              onChange={({ target }) => setDate(target.value)}
-            />
-            <TextField
-              id="standard-basic"
-              label="Specialist"
-              variant="standard"
-              fullWidth
-              value={specialist}
-              onChange={({ target }) => setSpecialist(target.value)}
-            />
-            <TextField
-              id="standard-basic"
-              label="Healthcheck Rating"
-              variant="standard"
-              value={healthRating}
-              onChange={({ target }) => setHealthRating(target.value)}
-              fullWidth
-            />
-            <TextField
-              id="standard-basic"
-              label="Diagnosis codes"
-              variant="standard"
-              value={diagnosisCodes}
-              onChange={({ target }) => setdiagnosisCodes(target.value)}
-              fullWidth
-            />
-            <Grid
-              container
-              direction="row"
-              sx={{ justifyContent: "space-between", alignItems: "center" }}
-            >
-              <Button variant="contained" color="error" onClick={cancel}>
-                Cancel
-              </Button>
-              <Button variant="contained" type="submit">
-                Add
-              </Button>
-            </Grid>
-          </FormControl>
-        </form>
-      </Box>
+      <FormControl fullWidth>
+        <InputLabel>New Entry</InputLabel>
+        <Select
+          value={entryType}
+          label="Entry"
+          onChange={({ target }) => setEntryType(target.value)}
+        >
+          <MenuItem value={"HealthCheck"}>Health Check</MenuItem>
+          <MenuItem value={"Hospital"}>Hospital</MenuItem>
+          <MenuItem value={"OccupationalHealthCare"}>
+            Occupational Health Care
+          </MenuItem>
+        </Select>
+      </FormControl>
+      {entryType === "Hospital" ? (
+        <>
+          <Hospital
+            description={description}
+            setDescription={setDescription}
+            date={date}
+            setDate={setDate}
+            specialist={specialist}
+            setSpecialist={setSpecialist}
+            diagnosisCodes={diagnosisCodes}
+            setdiagnosisCodes={setdiagnosisCodes}
+            submit={submit}
+            setDischargeCriteria={setDischargeCriteria}
+            setDischargeDate={setDischargeDate}
+            dischargeDate={dischargeDate}
+            dischargeCriteria={dischargeCriteria}
+            diagnosesCode={diagnosesCode}
+            handleChange={handleChange}
+          />
+        </>
+      ) : (
+        <></>
+      )}
+      {entryType === "HealthCheck" ? (
+        <>
+          <HealthForm
+            description={description}
+            setDescription={setDescription}
+            date={date}
+            setDate={setDate}
+            specialist={specialist}
+            setSpecialist={setSpecialist}
+            healthRating={healthRating}
+            setHealthRating={setHealthRating}
+            diagnosisCodes={diagnosisCodes}
+            setdiagnosisCodes={setdiagnosisCodes}
+            submit={submit}
+            diagnosesCode={diagnosesCode}
+            handleChange={handleChange}
+          />
+        </>
+      ) : (
+        <></>
+      )}
+      {entryType === "OccupationalHealthCare" ? (
+        <>
+          <OccupationalFrom
+            description={description}
+            setDescription={setDescription}
+            date={date}
+            setDate={setDate}
+            specialist={specialist}
+            setSpecialist={setSpecialist}
+            diagnosisCodes={diagnosisCodes}
+            setdiagnosisCodes={setdiagnosisCodes}
+            setSickStart={setSickStart}
+            setSickEnd={setSickEnd}
+            sickStart={sickStart}
+            sickEnd={sickEnd}
+            submit={submit}
+            employerName={employerName}
+            setEmployerName={setEmployerName}
+            diagnosesCode={diagnosesCode}
+            handleChange={handleChange}
+          />
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

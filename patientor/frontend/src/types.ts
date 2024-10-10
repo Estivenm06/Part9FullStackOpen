@@ -1,3 +1,5 @@
+import { SelectChangeEvent } from "@mui/material";
+import { Dayjs } from "dayjs";
 export interface Diagnosis {
   map(arg0: (d: any) => any): any;
   code: string;
@@ -12,12 +14,66 @@ enum HealhCheckRating {
   "CriticalRisk" = 3,
 }
 
-type Discharge = {
+interface BaseProps {
+  date: Dayjs | null ;
+  description: string;
+  specialist: string;
+  diagnosisCodes: string[];
+  setDate: React.Dispatch<React.SetStateAction<Dayjs | null>>
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  setSpecialist: React.Dispatch<React.SetStateAction<string>>;
+  setdiagnosisCodes: React.Dispatch<React.SetStateAction<string[]>>
+  submit: (event: React.SyntheticEvent) => void;
+  diagnosesCode: Array<Diagnosis['code']>
+  handleChange: (event: SelectChangeEvent<string[]>) => void
+
+}
+
+export interface NewEntryProp extends BaseProps {
+  healthRating: string;
+  setHealthRating: React.Dispatch<React.SetStateAction<string>>;
+  error: string | null;
+  entryType: string;
+  setEntryType: React.Dispatch<React.SetStateAction<string>>;
+  dischargeDate: string;
+  setDischargeDate: React.Dispatch<React.SetStateAction<string>>;
+  dischargeCriteria: string;
+  setDischargeCriteria: React.Dispatch<React.SetStateAction<string>>;
+  employerName: string;
+  setEmployerName: React.Dispatch<React.SetStateAction<string>>;
+  sickStart: string;
+  setSickStart: React.Dispatch<React.SetStateAction<string>>;
+  sickEnd: string;
+  setSickEnd: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface HealthProp extends BaseProps {
+  healthRating: string;
+  setHealthRating: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface HospitalProps extends BaseProps {
+  dischargeDate: string;
+  setDischargeDate: React.Dispatch<React.SetStateAction<string>>;
+  dischargeCriteria: string;
+  setDischargeCriteria: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface OccupationalForm extends BaseProps {
+  employerName: string;
+  setEmployerName: React.Dispatch<React.SetStateAction<string>>;
+  sickStart: string;
+  setSickStart: React.Dispatch<React.SetStateAction<string>>;
+  sickEnd: string;
+  setSickEnd: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export type Discharge = {
   date: string;
   criteria: string;
 };
 
-type SickLeave = {
+export type SickLeave = {
   startDate: string;
   endDate: string;
 };
@@ -68,5 +124,7 @@ export interface Patient {
 }
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
-type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never
-export type newEntry = UnionOmit<Entry, 'id'>
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+export type newEntry = UnionOmit<Entry, "id">;

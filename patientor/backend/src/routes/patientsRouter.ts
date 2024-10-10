@@ -37,7 +37,7 @@ router.post("/", (req, res) => {
 router.post("/:id/entries", (req, res) => {
   const id = req.params.id;
   const body = req.body;
-  if (!body.date || !body.description || !body.specialist || !body.type ) {
+  if (!body.date || !body.description || !body.specialist || !body.type) {
     res.status(400).send({ error: "Body empty or some values are missing!" });
   } else {
     const newEntry = createEntry(body, id);
